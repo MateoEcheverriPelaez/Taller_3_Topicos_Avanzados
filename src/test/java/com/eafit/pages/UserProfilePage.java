@@ -16,7 +16,7 @@ import java.time.Duration;
  * como la eliminación de la cuenta del usuario.
  * </p>
  */
-public class ProfilePage {
+public class UserProfilePage {
 
     private final WebDriver driver;
     private final By deleteAccountButton = By.xpath("//button[@id='submit' and text()='Delete Account']");
@@ -27,7 +27,7 @@ public class ProfilePage {
      *
      * @param driver instancia de WebDriver para controlar la página actual.
      */
-    public ProfilePage(WebDriver driver) {
+    public UserProfilePage(WebDriver driver) {
         this.driver = driver;
     }
 

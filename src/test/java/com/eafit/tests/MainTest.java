@@ -1,8 +1,8 @@
 package com.eafit.tests;
 
-import com.eafit.api.UserApiService;
-import com.eafit.pages.LoginPage;
-import com.eafit.pages.ProfilePage;
+import com.eafit.api.UserService;
+import com.eafit.pages.UserLoginPage;
+import com.eafit.pages.UserProfilePage;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,10 +23,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * para interactuar con el servicio web de la API.
  * </p>
  */
-class UserTest {
+class MainTest {
 
     WebDriver driver;
-    UserApiService userApiService;
+    UserService userService;
     String username;
     String password;
 
@@ -42,7 +42,7 @@ class UserTest {
         username = String.format("usereafit%s", time);
         password = String.format("Usereafit%s!", time);
         initializeDriver();
-        userApiService = new UserApiService();
+        userService = new UserService();
     }
 
     /**
@@ -60,8 +60,8 @@ class UserTest {
         deleteUser();
 
         // Intentar iniciar sesión con el usuario eliminado
-        LoginPage loginPage = new LoginPage(driver);
-        String errorMessage = loginPage.loginWithErrors(username, password);
+        UserLoginPage userLoginPage = new UserLoginPage(driver);
+        String errorMessage = userLoginPage.loginWithErrors(username, password);
         assertTrue(errorMessage.contains("Invalid username or password"), "El mensaje de error no es el esperado.");
     }
 
@@ -84,7 +84,7 @@ class UserTest {
      * </p>
      */
     private void createUser() {
-        Response response = userApiService.createUser(username, password);
+        Response response = userService.createUser(username, password);
         assertEquals(201, response.getStatusCode(), "Error al crear el usuario");
     }
 
@@ -95,8 +95,8 @@ class UserTest {
      * </p>
      */
     private void performLogin() {
-        LoginPage loginPage = new LoginPage(driver);
-        loginPage.login(username, password);
+        UserLoginPage userLoginPage = new UserLoginPage(driver);
+        userLoginPage.login(username, password);
     }
 
     /**
@@ -106,7 +106,7 @@ class UserTest {
      * </p>
      */
     private void deleteUser() {
-        ProfilePage profilePage = new ProfilePage(driver);
+        UserProfilePage profilePage = new UserProfilePage(driver);
         profilePage.deleteAccount();
     }
 

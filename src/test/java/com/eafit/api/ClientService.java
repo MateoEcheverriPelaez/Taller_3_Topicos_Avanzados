@@ -12,7 +12,7 @@ import io.restassured.specification.RequestSpecification;
  * con la API.
  * </p>
  */
-public class ApiClient {
+public class ClientService {
 
     /**
      * Obtiene la configuración predefinida de una solicitud para interactuar

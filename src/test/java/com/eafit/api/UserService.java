@@ -9,7 +9,7 @@ import io.restassured.response.Response;
  * como la creación de nuevos usuarios en el sistema.
  * </p>
  */
-public class UserApiService {
+public class UserService {
 
     /**
      * Realiza la creación de un usuario nuevo en la API usando el nombre de usuario
@@ -33,7 +33,7 @@ public class UserApiService {
                 "password": "%s"
             }
         """;
-        return ApiClient.getRequestSpecification()
+        return ClientService.getRequestSpecification()
                 .body(String.format(body, username, password))
                 .when()
                 .post("/Account/v1/User")

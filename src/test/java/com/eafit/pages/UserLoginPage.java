@@ -15,7 +15,7 @@ import java.time.Duration;
  * posibles errores relacionados con el inicio de sesión.
  * </p>
  */
-public class LoginPage {
+public class UserLoginPage {
     private final WebDriver driver;
     private final By usernameField = By.xpath("//*[@id='userName']");
     private final By passwordField = By.xpath("//*[@id='password']");
@@ -27,7 +27,7 @@ public class LoginPage {
      *
      * @param driver instancia de WebDriver para interactuar con la página.
      */
-    public LoginPage(WebDriver driver) {
+    public UserLoginPage(WebDriver driver) {
         this.driver = driver;
     }
 
