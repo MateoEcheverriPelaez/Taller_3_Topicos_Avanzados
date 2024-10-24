@@ -3,28 +3,28 @@ package com.eafit.api;
 import io.restassured.response.Response;
 
 /**
- * Servicio para interactuar con la API de usuarios.
+ * Servicio para manejar las interacciones con la API de gestión de usuarios.
  * <p>
- * Proporciona métodos para realizar operaciones relacionadas con los usuarios,
- * como la creación de usuarios.
+ * Contiene métodos para llevar a cabo operaciones relacionadas con los usuarios,
+ * como la creación de nuevos usuarios en el sistema.
  * </p>
  */
 public class UserApiService {
 
     /**
-     * Crea un nuevo usuario en la API con el nombre de usuario y contraseña
-     * especificados.
+     * Realiza la creación de un usuario nuevo en la API usando el nombre de usuario
+     * y la contraseña proporcionados.
      * <p>
-     * Envía una solicitud POST a la ruta "/Account/v1/User" con los datos del
-     * usuario en el cuerpo de la solicitud.
-     * La solicitud espera que la API devuelva un código de estado 201 para indicar
-     * que la creación del usuario fue exitosa.
+     * Envía una solicitud HTTP POST a la ruta "/Account/v1/User" con los datos
+     * del usuario en formato JSON dentro del cuerpo de la solicitud.
+     * Se considera que la creación es exitosa si la respuesta de la API tiene
+     * un código de estado 201.
      * </p>
      *
-     * @param username el nombre de usuario para el nuevo usuario.
-     * @param password la contraseña para el nuevo usuario.
-     * @return el objeto {@link Response} que contiene la respuesta de la API.
-     * @throws AssertionError si el código de estado de la respuesta no es 201.
+     * @param username el nombre del usuario que se va a registrar.
+     * @param password la clave de acceso para el nuevo usuario.
+     * @return un objeto {@link Response} con la respuesta devuelta por la API.
+     * @throws AssertionError si la respuesta no tiene un código de estado 201.
      */
     public Response createUser(String username, String password) {
         String body = """

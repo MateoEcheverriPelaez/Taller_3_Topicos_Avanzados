@@ -17,11 +17,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Clase de prueba para validar la creación, inicio de sesión y eliminación
- * de un usuario en la aplicación web.
+ * Prueba para validar las funcionalidades básicas de usuario en la web.
  * <p>
- * Utiliza Selenium WebDriver para la interacción con la interfaz de usuario
- * y Rest Assured para la comunicación con la API.
+ * La clase combina Selenium WebDriver para la interfaz gráfica con Rest Assured
+ * para interactuar con el servicio web de la API.
  * </p>
  */
 class UserTest {
@@ -32,10 +31,9 @@ class UserTest {
     String password;
 
     /**
-     * Configuración inicial de las pruebas.
+     * Preparación antes de cada prueba.
      * <p>
-     * Se ejecuta antes de cada prueba, inicializando el nombre de usuario,
-     * la contraseña, el navegador y el servicio de la API.
+     * Configura los datos del usuario y el navegador antes de cada ejecución.
      * </p>
      */
     @BeforeEach
@@ -48,13 +46,11 @@ class UserTest {
     }
 
     /**
-     * Prueba que valida la creación de un usuario, su inicio de sesión
-     * y la eliminación del usuario.
+     * Realiza la prueba de creación, inicio de sesión y eliminación de un usuario.
      * <p>
-     * Verifica que el usuario sea creado correctamente, luego realiza el inicio
-     * de sesión en la aplicación, elimina la cuenta del usuario, y finalmente
-     * intenta autenticar al usuario eliminado, comprobando que se muestre un mensaje
-     * de error adecuado.
+     * Se asegura de que el usuario se cree correctamente, inicie sesión con éxito,
+     * y luego sea eliminado. Posteriormente, verifica que el usuario eliminado no
+     * pueda autenticarse de nuevo.
      * </p>
      */
     @Test
@@ -63,17 +59,16 @@ class UserTest {
         performLogin();
         deleteUser();
 
-        // Intentar autenticación nuevamente
+        // Intentar iniciar sesión con el usuario eliminado
         LoginPage loginPage = new LoginPage(driver);
         String errorMessage = loginPage.loginWithErrors(username, password);
-        assertTrue(errorMessage.contains("Invalid username or password"), "Verificación fallida.");
+        assertTrue(errorMessage.contains("Invalid username or password"), "El mensaje de error no es el esperado.");
     }
 
     /**
-     * Limpieza después de cada prueba.
+     * Limpieza posterior a cada prueba.
      * <p>
-     * Se ejecuta después de cada prueba, cerrando el navegador para liberar
-     * recursos.
+     * Se cierra el navegador para liberar los recursos utilizados.
      * </p>
      */
     @AfterEach
@@ -82,24 +77,21 @@ class UserTest {
     }
 
     /**
-     * Crea un usuario mediante la API y verifica que la creación sea exitosa.
+     * Crea un usuario mediante una solicitud API y verifica su correcta creación.
      * <p>
-     * Utiliza el servicio de API para enviar la solicitud de creación de usuario
-     * y verifica que el código de estado devuelto sea 201.
+     * Envía la petición a la API para registrar un nuevo usuario y verifica
+     * que el estado de la respuesta sea 201.
      * </p>
-     *
-     * @throws AssertionError si el código de estado no es 201.
      */
     private void createUser() {
         Response response = userApiService.createUser(username, password);
-        assertEquals(201, response.getStatusCode(), "Falló la creación del usuario");
+        assertEquals(201, response.getStatusCode(), "Error al crear el usuario");
     }
 
     /**
-     * Realiza el inicio de sesión en la aplicación con el usuario creado.
+     * Realiza el inicio de sesión en la aplicación con las credenciales generadas.
      * <p>
-     * Utiliza la página de inicio de sesión para autenticar al usuario
-     * con las credenciales previamente generadas.
+     * Emplea la página de inicio de sesión para autenticar al usuario con los datos registrados.
      * </p>
      */
     private void performLogin() {
@@ -108,9 +100,9 @@ class UserTest {
     }
 
     /**
-     * Elimina la cuenta del usuario desde la página de perfil.
+     * Elimina al usuario desde la interfaz de perfil.
      * <p>
-     * Accede a la página de perfil y realiza la eliminación de la cuenta.
+     * Accede a la página del perfil del usuario y procede a eliminar la cuenta.
      * </p>
      */
     private void deleteUser() {
@@ -119,10 +111,9 @@ class UserTest {
     }
 
     /**
-     * Inicializa el controlador WebDriver y configura el navegador.
+     * Configura el WebDriver y prepara el entorno del navegador.
      * <p>
-     * Abre Firefox, navega a la página de inicio de sesión, ajusta el zoom de la página
-     * y maximiza la ventana del navegador.
+     * Abre Firefox, navega a la URL especificada, ajusta el zoom y maximiza la ventana.
      * </p>
      */
     private void initializeDriver() {

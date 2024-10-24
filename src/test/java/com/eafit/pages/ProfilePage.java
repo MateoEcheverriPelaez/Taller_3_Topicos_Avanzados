@@ -10,10 +10,10 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 
 /**
- * Representa la página de perfil del usuario.
+ * Página de perfil del usuario.
  * <p>
- * Proporciona métodos para realizar acciones relacionadas con la gestión del perfil,
- * tales como la eliminación de la cuenta.
+ * Contiene métodos para manejar acciones específicas relacionadas con la gestión del perfil,
+ * como la eliminación de la cuenta del usuario.
  * </p>
  */
 public class ProfilePage {
@@ -23,19 +23,19 @@ public class ProfilePage {
     private final By okModalButton = By.xpath("//button[@id='closeSmallModal-ok' and text()='OK']");
 
     /**
-     * Constructor de la clase que inicializa el controlador de la página.
+     * Constructor que configura el WebDriver para interactuar con la página.
      *
-     * @param driver el controlador WebDriver que maneja la página.
+     * @param driver instancia de WebDriver para controlar la página actual.
      */
     public ProfilePage(WebDriver driver) {
         this.driver = driver;
     }
 
     /**
-     * Elimina la cuenta del usuario actual desde la página de perfil.
+     * Realiza la acción de eliminar la cuenta del usuario desde la interfaz de perfil.
      * <p>
-     * Espera a que el botón "Delete Account" sea visible, hace clic en él,
-     * confirma la acción en el modal y maneja la alerta del navegador.
+     * Se asegura de que el botón "Delete Account" sea visible, lo selecciona,
+     * confirma la acción en el modal emergente y acepta la alerta.
      * </p>
      */
     public void deleteAccount() {

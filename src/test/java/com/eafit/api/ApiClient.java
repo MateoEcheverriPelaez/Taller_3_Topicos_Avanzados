@@ -4,23 +4,24 @@ import io.restassured.RestAssured;
 import io.restassured.specification.RequestSpecification;
 
 /**
- * Clase utilitaria para configurar la especificación de solicitudes HTTP
- * utilizando Rest Assured.
+ * Clase auxiliar para la configuración de las solicitudes HTTP
+ * con Rest Assured.
  * <p>
- * Proporciona una configuración base que incluye la URL base y
- * los encabezados comunes necesarios para realizar solicitudes a la API.
+ * Proporciona una especificación de solicitud base, incluyendo la
+ * configuración de la URL y los encabezados necesarios para la comunicación
+ * con la API.
  * </p>
  */
 public class ApiClient {
 
     /**
-     * Devuelve la especificación de solicitud configurada para interactuar
+     * Obtiene la configuración predefinida de una solicitud para interactuar
      * con la API.
      * <p>
-     * Configura la URL base y el encabezado "Content-Type" como "application/json".
+     * Establece la URL base y el tipo de contenido en "application/json".
      * </p>
      *
-     * @return la especificación de solicitud configurada para Rest Assured.
+     * @return la configuración de solicitud predeterminada para Rest Assured.
      */
     public static RequestSpecification getRequestSpecification() {
         return RestAssured
