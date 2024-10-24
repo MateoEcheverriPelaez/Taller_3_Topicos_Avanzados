@@ -1,127 +1,116 @@
 package com.eafit.tests;
 
 import com.eafit.api.UserService;
-import com.eafit.pages.UserLoginPage;
-import com.eafit.pages.UserProfilePage;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.*;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.util.Date;
+import java.time.Duration;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
-/**
- * Prueba para validar las funcionalidades básicas de usuario en la web.
- * <p>
- * La clase combina Selenium WebDriver para la interfaz gráfica con Rest Assured
- * para interactuar con el servicio web de la API.
- * </p>
- */
-class MainTest {
+public class MainTest {
 
-    WebDriver driver;
-    UserService userService;
-    String username;
-    String password;
+    private WebDriver driver;
+    private WebDriverWait wait;
+    private JavascriptExecutor js;
+    private UserService userService;
 
-    /**
-     * Preparación antes de cada prueba.
-     * <p>
-     * Configura los datos del usuario y el navegador antes de cada ejecución.
-     * </p>
-     */
+    private static final By USERNAME_INPUT = By.id("userName");
+    private static final By PASSWORD_INPUT = By.id("password");
+    private static final By LOGIN_BUTTON = By.id("login");
+    private static final By DELETE_ACCOUNT_BUTTON = By.xpath("//*[@class=\"text-center button\"]//button[@id=\"submit\"]");
+    private static final By CONFIRM_DELETION_BUTTON = By.id("closeSmallModal-ok");
+    private static final By LOGIN_ERROR = By.id("name");
+
+    private static final String LOGIN_URL = "https://demoqa.com/login";
+    private static final String USERNAME = "johndoe";
+    private static final String PASSWORD = "315JWZ5oj@";
+    private static final int TIMEOUT_SECONDS = 20;
+    private static final String INVALID_LOGIN_MESSAGE = "Invalid username or password!";
+
     @BeforeEach
     public void setUp() {
-        Long time = new Date().getTime();
-        username = String.format("usereafit%s", time);
-        password = String.format("Usereafit%s!", time);
-        initializeDriver();
+        driver = new ChromeDriver();
+        driver.manage().window().maximize();
+        wait = new WebDriverWait(driver, Duration.ofSeconds(TIMEOUT_SECONDS));
+        js = (JavascriptExecutor) driver;
         userService = new UserService();
     }
 
-    /**
-     * Realiza la prueba de creación, inicio de sesión y eliminación de un usuario.
-     * <p>
-     * Se asegura de que el usuario se cree correctamente, inicie sesión con éxito,
-     * y luego sea eliminado. Posteriormente, verifica que el usuario eliminado no
-     * pueda autenticarse de nuevo.
-     * </p>
-     */
     @Test
-    void testUserCreationAndLogin() {
-        createUser();
-        performLogin();
-        deleteUser();
+    public void testLoginAndAccountDeletion() {
+        // Crear usuario via API y validar creación
+        createUser(USERNAME, PASSWORD);
 
-        // Intentar iniciar sesión con el usuario eliminado
-        UserLoginPage userLoginPage = new UserLoginPage(driver);
-        String errorMessage = userLoginPage.loginWithErrors(username, password);
-        assertTrue(errorMessage.contains("Invalid username or password"), "El mensaje de error no es el esperado.");
+        // Navegar a la página de login
+        driver.get(LOGIN_URL);
+
+        // Realizar login
+        performLogin(USERNAME, PASSWORD);
+
+        // Eliminar la cuenta
+        deleteAccount();
+
+        // Verificar mensaje de error al intentar iniciar sesión nuevamente
+        performLogin(USERNAME, PASSWORD);
+        verifyLoginError(INVALID_LOGIN_MESSAGE);
     }
 
-    /**
-     * Limpieza posterior a cada prueba.
-     * <p>
-     * Se cierra el navegador para liberar los recursos utilizados.
-     * </p>
-     */
     @AfterEach
-    void finishTest() {
+    public void tearDown() {
         driver.quit();
     }
 
-    /**
-     * Crea un usuario mediante una solicitud API y verifica su correcta creación.
-     * <p>
-     * Envía la petición a la API para registrar un nuevo usuario y verifica
-     * que el estado de la respuesta sea 201.
-     * </p>
-     */
-    private void createUser() {
+    private void createUser(String username, String password) {
         Response response = userService.createUser(username, password);
         assertEquals(201, response.getStatusCode(), "Error al crear el usuario");
     }
 
-    /**
-     * Realiza el inicio de sesión en la aplicación con las credenciales generadas.
-     * <p>
-     * Emplea la página de inicio de sesión para autenticar al usuario con los datos registrados.
-     * </p>
-     */
-    private void performLogin() {
-        UserLoginPage userLoginPage = new UserLoginPage(driver);
-        userLoginPage.login(username, password);
+    private void performLogin(String username, String password) {
+        WebElement userNameInput = waitForElement(USERNAME_INPUT);
+        WebElement passwordInput = driver.findElement(PASSWORD_INPUT);
+        WebElement loginButton = driver.findElement(LOGIN_BUTTON);
+
+        userNameInput.sendKeys(username);
+        passwordInput.sendKeys(password);
+
+        scrollIntoViewAndClick(loginButton);
     }
 
-    /**
-     * Elimina al usuario desde la interfaz de perfil.
-     * <p>
-     * Accede a la página del perfil del usuario y procede a eliminar la cuenta.
-     * </p>
-     */
-    private void deleteUser() {
-        UserProfilePage profilePage = new UserProfilePage(driver);
-        profilePage.deleteAccount();
+    private void deleteAccount() {
+        WebElement deleteAccountButton = waitForElement(DELETE_ACCOUNT_BUTTON);
+        scrollIntoViewAndClick(deleteAccountButton);
+
+        WebElement confirmDeletionButton = waitForElement(CONFIRM_DELETION_BUTTON);
+        confirmDeletionButton.click();
+
+        waitForAlertAndAccept();
     }
 
-    /**
-     * Configura el WebDriver y prepara el entorno del navegador.
-     * <p>
-     * Abre Firefox, navega a la URL especificada, ajusta el zoom y maximiza la ventana.
-     * </p>
-     */
-    private void initializeDriver() {
-        driver = new FirefoxDriver();
-        driver.get("https://demoqa.com/login");
-        JavascriptExecutor jse = (JavascriptExecutor) driver;
-        jse.executeScript("document.body.style.zoom='60%'");
-        driver.manage().window().maximize();
+    private void verifyLoginError(String expectedErrorMessage) {
+        WebElement loginError = waitForElement(LOGIN_ERROR);
+        Assertions.assertEquals(expectedErrorMessage, loginError.getText());
     }
 
+    private WebElement waitForElement(By locator) {
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
+    }
+
+    private void scrollIntoViewAndClick(WebElement element) {
+        js.executeScript("arguments[0].scrollIntoView(true);", element);
+        element.click();
+    }
+
+    private void waitForAlertAndAccept() {
+        wait.until(ExpectedConditions.alertIsPresent());
+        Alert alert = driver.switchTo().alert();
+        alert.accept();
+    }
 }
