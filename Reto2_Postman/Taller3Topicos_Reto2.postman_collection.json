@@ -7,12 +7,61 @@
 	},
 	"item": [
 		{
-			"name": "Techport",
-			"request": {
-				"method": "GET",
-				"header": []
-			},
-			"response": []
+			"name": "Techport API",
+			"item": [
+				{
+					"name": "Techport",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.globals.set(\"api_key\", \"8JdLscgADbGFgCUjcCM51Z3QlJsO7P4NOf2wFbS4\");"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{api_key}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{domainTechport}}/api/projects?updatedSince=2024-10-01",
+							"host": [
+								"{{domainTechport}}"
+							],
+							"path": [
+								"api",
+								"projects"
+							],
+							"query": [
+								{
+									"key": "updatedSince",
+									"value": "2024-10-01"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	]
 }

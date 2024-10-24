@@ -10,16 +10,25 @@ Este proyecto, desarrollado en Java 17, tiene como finalidad automatizar la vali
 
 ## Participantes
 - Alejandro Realpe
-- Anderson Aguilar
+- Anderson Aguiar
 - Mateo Echeverri
 
 ## Requisitos previos
 
 - Java 17
 - Gradle
+- Postman
 
 ## Dependencias
 El proyecto utiliza las siguientes dependencias en Gradle:
 
 - [Rest Assured](https://rest-assured.io/) 
-- [Selenium WebDriver](https://www.selenium.dev/documentation/) 
+- [Selenium WebDriver](https://www.selenium.dev/documentation/)
+
+## Reto 1
+
+## Reto 2
+El reto 2 consiste en seleccional un API de la página de la [NASA](https://api.nasa.gov/) y seleccionar 2 API docuemntadas en el sitio con el fin de realizar el consumo de las mismas.
+
+En el repositorio, en la carpeta Ret2_Postman se encuantran los siguientes archivos:
+
