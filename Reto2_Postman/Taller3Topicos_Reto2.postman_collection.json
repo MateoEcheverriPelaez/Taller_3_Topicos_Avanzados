@@ -10,13 +10,22 @@
 			"name": "Techport API",
 			"item": [
 				{
-					"name": "Techport",
+					"name": "Get Projects",
 					"event": [
 						{
 							"listen": "prerequest",
 							"script": {
 								"exec": [
-									"pm.globals.set(\"api_key\", \"8JdLscgADbGFgCUjcCM51Z3QlJsO7P4NOf2wFbS4\");"
+									"// Obtener la fecha de hace 7 días",
+									"const today = new Date();",
+									"const monthAgoDate = new Date(today);",
+									"monthAgoDate.setDate(today.getDate() - 90);",
+									"const monthAgoDateFormatted = monthAgoDate.toISOString().split('T')[0];",
+									"",
+									"",
+									"pm.globals.set(\"api_key\", \"8JdLscgADbGFgCUjcCM51Z3QlJsO7P4NOf2wFbS4\");",
+									"pm.globals.set(\"update_since_date\", monthAgoDateFormatted);",
+									""
 								],
 								"type": "text/javascript",
 								"packages": {}
@@ -43,7 +52,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{domainTechport}}/api/projects?updatedSince=2024-10-01",
+							"raw": "{{domainTechport}}/api/projects?updatedSince={{update_since_date}}",
 							"host": [
 								"{{domainTechport}}"
 							],
@@ -54,7 +63,136 @@
 							"query": [
 								{
 									"key": "updatedSince",
-									"value": "2024-10-01"
+									"value": "{{update_since_date}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Project information",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{api_key}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{domainTechport}}/api/projects/116315",
+							"host": [
+								"{{domainTechport}}"
+							],
+							"path": [
+								"api",
+								"projects",
+								"116315"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Asteroids - NeoWs",
+			"item": [
+				{
+					"name": "Neo feed",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Obtener la fecha actual",
+									"const today = new Date();",
+									"const todayFormatted = today.toISOString().split('T')[0];",
+									"",
+									"// Obtener la fecha de hace 7 días",
+									"const sevenDaysAgo = new Date(today);",
+									"sevenDaysAgo.setDate(today.getDate() - 7);",
+									"const sevenDaysAgoFormatted = sevenDaysAgo.toISOString().split('T')[0];",
+									"",
+									"",
+									"//pm.globals.set(\"api_key\", \"8JdLscgADbGFgCUjcCM51Z3QlJsO7P4NOf2wFbS4\");",
+									"pm.globals.set(\"start_date\", sevenDaysAgoFormatted);",
+									"pm.globals.set(\"end_date\", todayFormatted);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{domainNeo}}/neo/rest/v1/feed?start_date={{start_date}}&end_date={{end_date}}&api_key={{api_key}}",
+							"host": [
+								"{{domainNeo}}"
+							],
+							"path": [
+								"neo",
+								"rest",
+								"v1",
+								"feed"
+							],
+							"query": [
+								{
+									"key": "start_date",
+									"value": "{{start_date}}"
+								},
+								{
+									"key": "end_date",
+									"value": "{{end_date}}"
+								},
+								{
+									"key": "api_key",
+									"value": "{{api_key}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Neo Lookup",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{domainNeo}}/neo/rest/v1/neo/2412977?api_key={{api_key}}",
+							"host": [
+								"{{domainNeo}}"
+							],
+							"path": [
+								"neo",
+								"rest",
+								"v1",
+								"neo",
+								"2412977"
+							],
+							"query": [
+								{
+									"key": "api_key",
+									"value": "{{api_key}}"
 								}
 							]
 						}
