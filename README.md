@@ -32,3 +32,16 @@ El reto 2 consiste en seleccional un API de la página de la [NASA](https://api.
 
 En el repositorio, en la carpeta Ret2_Postman se encuantran los siguientes archivos:
 
+- _Taller3Topicos_Reto2.postman_collection.json_: Collection con cada una de los request implementados.
+- _workspace.postman_globals.json_: archivo que contiene toda la definición de variables globales utilizadas en el reto.
+- _EvidenciasTaller3_Postman.pdf_: Documento que describe el proceso realizado y todas las evidencias de ejecución en Postman.
+
+Se realizaron 4 request en total, 2 para el API TechPort y 2 para el API Asteroids – NeoWs. Los request fueron los siguientes:
+
+TechPort:
+_Get projects_: request que me entrega los proyectos creados y finalizados de la NASA. Se debe parametrizar una fecha de inicio, la cual se tomará desde una variable global.
+_Project information_: request que me entrega la información detallada del proyecto proporcionando un ID de proyecto.
+
+Asteroids – NeoWs
+_Neo feed_: request que recupera una lista de asteroides en función de su fecha de aproximación más cercana a la Tierra.
+_Neo Lookup_: request que permite conocer la información específica de un asteroide según el ID de la NASA.
